@@ -1,0 +1,31 @@
+# For more information about the REST Client extension for Visual Studio Code, visit:
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+
+@baseUrl=http://localhost:5000/api
+@email=manager@manager.com
+#@email=admin@admin.com
+#@email=user@user.com
+
+# @name authentication
+curl --location --request POST '{{baseUrl}}/auth' \
+-H 'Content-Type: application/json' \
+-H 'accept: application/json' \
+-d '{
+    "Email": "{{email}}",
+    "Password":"123"
+}'
+
+###
+@token = {{authentication.response.body.$}}
+
+###
+@access=manager
+#@access=admin
+#@access=manageranduser
+#@access=anonymous
+
+# @name authorization
+curl --location --request GET '{{baseUrl}}/home/{{access}}' \
+--header 'accept: application/json' \
+--header 'Authorization: Bearer {{token}}'
